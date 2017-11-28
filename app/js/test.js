@@ -15,14 +15,17 @@ var tbody = document.getElementById('tbody')
 var refresh = document.getElementById('refresh')
 var add = document.getElementById('add')
 
-
+var queryData = {
+    pageNumber: 1,
+    pageSize: 10
+}
 
 // 查询
 $('#refresh').on('click', function() {
     $.ajax({
         url: '/queryAll',
         type: 'post',
-        data: '',
+        data: queryData,
         success: function(res) {
             var data = res.result;
             var html = '';
@@ -44,6 +47,18 @@ $('#refresh').on('click', function() {
     })
 })
 $('#refresh').click()
+
+// 翻页
+$('.setpage').on('click', function() {
+    var action = $(this).val()
+    if (action == 'prev') {
+        queryData.pageNumber--;
+        $('#refresh').click()
+    } else {
+        queryData.pageNumber++;
+        $('#refresh').click()
+    }
+})
 
 // 新增
 $('#add').on('click', function() {

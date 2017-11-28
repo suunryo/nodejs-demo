@@ -50,7 +50,9 @@ connection.connect()
 
 // 查询所有
 app.post('/queryAll', function(req, res) {
-    connection.query(UserSQL.queryAll, function(err, rows, fields) {
+    let number = req.body.pageNumber;
+    let size = req.body.pageSize;
+    connection.query(UserSQL.queryAll, [(number - 1) * size, number * size], function(err, rows, fields) {
         if (err) {
             res.send({
                 code: 500,
