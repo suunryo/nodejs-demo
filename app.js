@@ -1,8 +1,5 @@
 var express = require('express');
 var bodyParser = require('body-parser')
-var mysql = require('mysql')
-var dbConfig = require('./db/DBconfig.js'); //数据库配置
-var UserSQL = require('./db/usersql.js') // SQL语句
 var routes = require('./service/post.js') // 接口
 
 var app = express();
@@ -25,28 +22,6 @@ app.use(function(req, res, next) {
     console.log('======request type:', req.method, '; request url:', req.url, '======');
     next();
 });
-
-// 处理/test的所有请求
-app.use('/test', function(req, res, next) {
-    console.log('request body:', req.body);
-    next();
-});
-
-// 处理/test的post请求
-app.post('/test', function(req, res, next) {
-    var name = req.body.name;
-    name = name + ' is sb'
-    var result = {
-        code: 200,
-        msg: 'success',
-        result: name
-    };
-    res.send(result);
-});
-
-
-var connection = mysql.createConnection(dbConfig.mysql) // 建立连接池
-connection.connect()
 
 // 查询所有
 app.post('/queryAll', routes)
