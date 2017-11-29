@@ -3,7 +3,7 @@ var bodyParser = require('body-parser')
 var mysql = require('mysql')
 var dbConfig = require('./db/DBconfig.js'); //数据库配置
 var UserSQL = require('./db/usersql.js') // SQL语句
-
+var routes = require('./service/post.js') // 接口
 
 var app = express();
 
@@ -49,73 +49,13 @@ var connection = mysql.createConnection(dbConfig.mysql) // 建立连接池
 connection.connect()
 
 // 查询所有
-app.post('/queryAll', function(req, res) {
-    let number = req.body.pageNumber;
-    let size = req.body.pageSize;
-    connection.query(UserSQL.queryAll, [(number - 1) * size, number * size], function(err, rows, fields) {
-        if (err) {
-            res.send({
-                code: 500,
-                msg: 'error'
-            })
-        } else {
-            res.send({
-                code: 200,
-                msg: 'success',
-                result: rows
-            })
-        }
-    })
-})
+app.post('/queryAll', routes)
 
 // 新增
-app.post('/add', function(req, res) {
-    connection.query(UserSQL.insert, [req.body.name, req.body.age, req.body.gender], function(err, rows) {
-        if (err) {
-            res.send({
-                code: 500,
-                msg: 'error'
-            })
-        } else {
-            res.send({
-                code: 200,
-                msg: 'success',
-                result: rows
-            })
-        }
-    })
-})
+app.post('/add', routes)
 
 // 删除
-app.post('/delById', function(req, res) {
-    connection.query(UserSQL.deleteUserById, [req.body.id], function(err, rows, fields) {
-        if (err) {
-            res.send({
-                code: 500,
-                msg: 'error'
-            })
-        } else {
-            res.send({
-                code: 200,
-                msg: 'success'
-            })
-        }
-    })
-})
+app.post('/delById', routes)
 
 // 修改
-app.post('/updateAge', function(req, res) {
-    connection.query(UserSQL.updateAge, [req.body.id], function(err, rows, fields) {
-        if (err) {
-            res.send({
-                code: 500,
-                msg: 'error'
-            })
-        } else {
-            res.send({
-                code: 200,
-                msg: 'success'
-            })
-        }
-    })
-})
+app.post('/updateAge', routes)
